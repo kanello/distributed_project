@@ -1,0 +1,8 @@
+{
+    "addresses": [
+        {"ip": "127.0.0.1", "port": 5050, "internal_port": 5051},
+        {"ip": "127.0.0.1", "port": 5060, "internal_port": 5061},
+        {"ip": "127.0.0.1", "port": 5070, "internal_port": 5071},
+        {"ip": "127.0.0.1", "port": 5080, "internal_port": 5081}
+    ]
+}

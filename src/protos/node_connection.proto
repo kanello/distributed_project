@@ -1,0 +1,59 @@
+
+// Copyright 2015 gRPC authors.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_outer_classname = "NodeConnectionProto";
+
+package nodeconnection;
+
+service NodeConnection {
+  rpc requestVote (VoteRequest) returns (VoteResponse) {}
+  rpc appendEntries (AppendEntriesRequest) returns (AppendEntriesResponse) {}
+}
+
+message VoteRequest {
+  int32 term = 1; // candidate's term
+  int32 candidate_id = 2; // candidate requesting vote
+  int32 last_log_index = 3; // index of candidate's last log entry
+  int32 last_log_term = 4; // term of candidate's last log entry
+}
+
+message VoteResponse {
+    int32 term = 1; // currentTerm, for candidate to update itself
+    bool vote_granted = 2; // true means candidate received vote
+}
+
+message AppendEntriesRequest {
+    int32 term = 1; // leader's term
+    int32 leader_id = 2; // give the followers the leader id so clients can be redirected if necessary
+    int32 prev_log_index = 3; // index of log entry immediately preceding new ones
+    int32 prev_log_term = 4; // term of prev_log_index entry
+    
+    repeated OperationDetails entries = 5; // log entries to store (empty for heartbeat). entries are just strings for now
+    int32 leader_commit = 6; // leader's commit index
+}
+
+message AppendEntriesResponse {
+    int32 term = 1; // current term, for leader to update itself
+    bool success = 2; // true if follower contained entry matching prev_log_index and prev_log_term
+}
+
+message OperationDetails {
+    string operation = 1;
+    string topic = 2;
+    string message = 3;
+}
